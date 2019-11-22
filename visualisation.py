@@ -20,7 +20,7 @@ def imageread(filePath):
     temp = pylab.imread(filenames[0])
     d, w = temp.shape
     h = len(filenames)
-    print 'width, depth, height : ',w,d,h
+    print ('width, depth, height : ',w,d,h)
 
     volume = np.zeros((w, d, h), dtype=np.uint16)
     k=0
