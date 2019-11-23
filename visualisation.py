@@ -2,13 +2,14 @@ import os
 import sys
 import pylab
 import glob
-import tkinter as tk
+import tkinter
 from tkinter import filedialog
 import vtk
 import numpy as np
 
+
 #We order all the directories by name
-path=tk.filedialog.askdirectory
+path=tkinter.filedialog.askdirectory()
 tulip_files = [t for t in os.listdir(path)]
 tulip_files.sort() #the os.listdir function do not give the files in the right order so we need to sort them
 
@@ -20,20 +21,20 @@ def imageread(filePath):
     temp = pylab.imread(filenames[0])
     d, w = temp.shape
     h = len(filenames)
-    print 'width, depth, height : ',w,d,h
+    print ('width, depth, height : ',w,d,h)
 
-    volume = np.zeros((w, d, h), dtype=np.uint16)
+    volume = np.zeros((d, w, h), dtype=np.uint16)
     k=0
     for img in filenames: #assuming tif     
         im=pylab.imread(img)
-        assert im.shape == (500,500), 'Image with an unexpected size'
+        assert im.shape == (520, 603), 'Image with an unexpected size'
         volume[:,:,k] = im
         k+=1
     return volume
 
 #We create the data we want to render. We create a 3D-image by a X-ray CT-scan made to an object. We store the values of each
 #slice and we complete the volume with them in the z axis
-matrix_full = imageread(path+'Image15/raw/reconstruction/*.tif')
+matrix_full = imageread(path+'/*.tif')
 
 # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
 # imports raw data and stores it.
@@ -48,7 +49,7 @@ dataImporter.SetDataScalarTypeToUnsignedShort()
 dataImporter.SetNumberOfScalarComponents(1)
 
 # The following two functions describe how the data is stored and the dimensions of the array it is stored in.
-w, h, d = tulip_matrix_full.shape
+w, h, d = matrix_full.shape
 dataImporter.SetDataExtent(0, h-1, 0, d-1, 0, w-1)
 dataImporter.SetWholeExtent(0, h-1, 0, d-1, 0, w-1)
 
@@ -72,11 +73,11 @@ volumeProperty.SetScalarOpacity(alphaChannelFunc)
 #volumeProperty.ShadeOn();
 
 # This class describes how the volume is rendered (through ray tracing).
-compositeFunction = vtk.vtkVolumeRayCastCompositeFunction()
+compositeFunc = vtk.vtkVolumeRayCastCompositeFunction()
 # We can finally create our volume. We also have to specify the data for it, as well as how the data will be rendered.
 volumeMapper = vtk.vtkVolumeRayCastMapper()
 volumeMapper.SetMaximumImageSampleDistance(0.01) # function to reduce the spacing between each image
-volumeMapper.SetVolumeRayCastFunction(compositeFunction)
+volumeMapper.SetVolumeRayCastFunction(compositeFunc)
 volumeMapper.SetInputConnection(dataImporter.GetOutputPort())
 
 # The class vtkVolume is used to pair the previously declared volume as well as the properties to be used when rendering that volume.
