@@ -49,10 +49,9 @@ dataImporter.SetDataScalarTypeToUnsignedShort()
 dataImporter.SetNumberOfScalarComponents(1)
 
 # The following two functions describe how the data is stored and the dimensions of the array it is stored in.
-w, h, d = matrix_full.shape
+w, d, h = matrix_full.shape
 dataImporter.SetDataExtent(0, h-1, 0, d-1, 0, w-1)
-dataImporter.SetWholeExtent(0, h-1, 0, d-1, 0, w-1)
-
+dataImporter.SetWholeExtent(0, h-1, 0, d-1, 0, w-1) 
 # This class stores color data and can create color tables from a few color points.
 colorFunc = vtk.vtkPiecewiseFunction()
 colorFunc.AddPoint(0, 0.0);
@@ -62,7 +61,8 @@ colorFunc.AddPoint(65536, 1);
 
 alphaChannelFunc = vtk.vtkPiecewiseFunction()
 #Create transfer mapping scalar value to opacity
-alphaChannelFunc.AddPoint(0, 0.0);
+
+alphaChannelFunc.AddPoint(30000, 0.0);
 alphaChannelFunc.AddPoint(65536, 1);
 
 # The previous two classes stored properties. Because we want to apply these properties to the volume we want to render,
@@ -73,11 +73,11 @@ volumeProperty.SetScalarOpacity(alphaChannelFunc)
 #volumeProperty.ShadeOn();
 
 # This class describes how the volume is rendered (through ray tracing).
-compositeFunc = vtk.vtkVolumeRayCastCompositeFunction()
+#compositeFunc = vtk.vtkFixedPointVolumeRayCastCompositeHelper()
 # We can finally create our volume. We also have to specify the data for it, as well as how the data will be rendered.
-volumeMapper = vtk.vtkVolumeRayCastMapper()
+volumeMapper = vtk.vtkFixedPointVolumeRayCastMapper()
 volumeMapper.SetMaximumImageSampleDistance(0.01) # function to reduce the spacing between each image
-volumeMapper.SetVolumeRayCastFunction(compositeFunc)
+#volumeMapper.SetVolumeRayCastFunction(compositeFunc)
 volumeMapper.SetInputConnection(dataImporter.GetOutputPort())
 
 # The class vtkVolume is used to pair the previously declared volume as well as the properties to be used when rendering that volume.
@@ -97,7 +97,7 @@ renderer.AddVolume(volume)
 # ... set background color to white ...
 renderer.SetBackground(1,1,1)
 # ... and set window size.
-renderWin.SetSize(550, 550)
+renderWin.SetSize(520, 603)
 renderWin.SetMultiSamples(4)
 
 # A simple function to be called when the user decides to quit the application.
