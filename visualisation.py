@@ -26,7 +26,11 @@ def imageread(filePath):
     k=0
     for img in filenames: #assuming tif     
         im=pylab.imread(img)
+<<<<<<< Updated upstream
         assert im.shape == (500,500), 'Image with an unexpected size'
+=======
+        assert im.shape == (198, 726), 'Image with an unexpected size'
+>>>>>>> Stashed changes
         volume[:,:,k] = im
         k+=1
     return volume
