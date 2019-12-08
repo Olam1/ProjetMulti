@@ -40,6 +40,7 @@ def imageread(filePath):
 matrix_full = imageread(path+'/*.tif')
 
 
+def visualisation (opacity = 30000):
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
     # imports raw data and stores it.
     dataImporter = vtk.vtkImageImport()
