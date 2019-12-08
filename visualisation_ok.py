@@ -2,20 +2,14 @@ import os
 import sys
 import pylab
 import glob
-import tkinter
-from tkinter import filedialog
 import vtk
 import numpy as np
-import fenetre_largeur
+# import fenetre_largeur
 
-
-#We order all the directories by name
-path=tkinter.filedialog.askdirectory()
-tulip_files = [t for t in os.listdir(path)]
-tulip_files.sort() #the os.listdir function do not give the files in the right order so we need to sort them
 
 #Function that open all the images of a folder and save them in a images list
-def imageread(filePath):    
+def imageread(filePath):
+    print('imageread')    
     filenames = [img for img in glob.glob(filePath)]
     filenames.sort()
 
@@ -30,17 +24,29 @@ def imageread(filePath):
 #    dim=fenetre_largeur.MyApp.afficher(fenetre_largeur.MyApp)  #726x198
     for img in filenames: #assuming tif     
         im=pylab.imread(img)
-        #assert im.shape == (dim[1], dim[0]), 'Image with an unexpected size'
+        
+        if im.shape != (d, w): #1d2w
+            print('Image with an unexpected size')
+            return 1
+        
         volume[:,:,k] = im
         k+=1
     return volume
 
 #We create the data we want to render. We create a 3D-image by a X-ray CT-scan made to an object. We store the values of each
 #slice and we complete the volume with them in the z axis
-matrix_full = imageread(path+'/*.tif')
+def file_choice(path):
+    print('file_choice')
+    #We order all the directories by name
+    tulip_files = [t for t in os.listdir(path)]
+    tulip_files.sort() #the os.listdir function do not give the files in the right order so we need to sort them
+    matrix_full = imageread(path+'/*.tif')
+    return matrix_full
 
 
-def visualisation (opacity = 30000):
+
+def visualisation (opacity = 30000, matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]])):
+    print('visualisation')
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
     # imports raw data and stores it.
     dataImporter = vtk.vtkImageImport()
@@ -68,6 +74,7 @@ def visualisation (opacity = 30000):
     #Create transfer mapping scalar value to opacity
     
     alphaChannelFunc.AddPoint(opacity, 0.0);
+    alphaChannelFunc.AddPoint(45000, 0.5);
     alphaChannelFunc.AddPoint(65536, 1);
     
     # The previous two classes stored properties. Because we want to apply these properties to the volume we want to render,
@@ -118,6 +125,6 @@ def visualisation (opacity = 30000):
     renderWin.Render()
     renderInteractor.Start()
     return 0
-    
+
 
 #visualisation()
