@@ -24,7 +24,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def afficher(self):
         width=self.spinBox_width.value()
         height=self.spinBox_height.value()
-        return width, height
         opacity=self.spinBox_opacity.value()
         self.label5.setText(str(width) + "x" + str(height))
         visu.visualisation(opacity)
