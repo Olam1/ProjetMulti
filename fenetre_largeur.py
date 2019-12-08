@@ -7,6 +7,7 @@ Created on Fri Nov 29 15:55:37 2019
 
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
+import visualisation_ok as visu
 
 
 qtCreatorFile = "user_interface.ui" # Enter file here.
@@ -24,6 +25,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         width=self.spinBox_width.value()
         height=self.spinBox_height.value()
         return width, height
+        opacity=self.spinBox_opacity.value()
+        self.label5.setText(str(width) + "x" + str(height))
+        visu.visualisation(opacity)
+        return (width, height)
  
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
