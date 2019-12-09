@@ -48,7 +48,9 @@ def file_choice(path):
 def visualisation (white_point = 30000,
                    black_point = 65536,
                    matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]]),
-                   point_1 = {"value":0, "opacity":0.}):
+                   point_1 = {"value":0, "opacity":0.},
+                   point_2 = {"value":0, "opacity":0.},
+                   point_3 = {"value":0, "opacity":0.}):
     
     print('visualisation')
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
@@ -79,6 +81,8 @@ def visualisation (white_point = 30000,
     
     alphaChannelFunc.AddPoint(white_point, 0.0);
     alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
+    alphaChannelFunc.AddPoint(point_2.get("value"), point_2.get("opacity"));
+    alphaChannelFunc.AddPoint(point_3.get("value"), point_3.get("opacity"));
     alphaChannelFunc.AddPoint(black_point, 1);
     
     # The previous two classes stored properties. Because we want to apply these properties to the volume we want to render,

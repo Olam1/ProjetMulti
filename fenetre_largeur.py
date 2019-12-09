@@ -29,9 +29,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.add_point.clicked.connect(self.ajouter_point)
     
     def ajouter_point(self):
-        MyApp.nb_points+= 1
-        self.point1Slider.setEnabled(True)
-        self.point1spinBox.setEnabled(True)
+        MyApp.nb_points+=1
+        if MyApp.nb_points == 1:
+            self.point1Slider.setEnabled(True)
+            self.point1spinBox.setEnabled(True)
+        elif MyApp.nb_points == 2:
+            self.point2Slider.setEnabled(True)
+            self.point2spinBox.setEnabled(True)
+        else:
+            self.point3Slider.setEnabled(True)
+            self.point3spinBox.setEnabled(True)
         print(MyApp.nb_points)
         return MyApp.nb_points
     
@@ -54,28 +61,35 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def afficher(self):
         self.warning_text_launch.clear()
-        width=self.spinBox_width.value()
-        height=self.spinBox_height.value()
+        #width=self.spinBox_width.value()
+        #height=self.spinBox_height.value()
         wp=self.spinBox_white_point.value()
         bp=self.spinBox_black_point.value()
-        if MyApp.nb_points == 1:
-            p1 = {}
+        p1=p2=p3={"value":0, "opacity":0.}
+        if MyApp.nb_points == 0:
+            pass
+        elif MyApp.nb_points == 1:
             p1["value"]=self.point1spinBox.value()
             p1["opacity"]=self.point1Slider.value()
-            try:
-                visu.visualisation(wp, bp, MyApp.matrix, p1)
-            except AttributeError:
-                self.warning_text_launch.setText("/!\ Please select files")
-                return 1
+        elif MyApp.nb_points == 2:  
+            p1["value"]=self.point1spinBox.value()
+            p1["opacity"]=self.point1Slider.value()
+            p2["value"]=self.point1spinBox.value()
+            p2["opacity"]=self.point1Slider.value()
         else:
-            # On teste si l'utilisateur a choisi un stack de fichiers
-            #Si ce n'est pas le cas on affiche un message d'erreur
-            try:
-                visu.visualisation(wp, bp, MyApp.matrix)
-            except AttributeError:
-                self.warning_text_launch.setText("/!\ Please select files")
-                return 1
-            return (width, height)
+            p1["value"]=self.point1spinBox.value()
+            p1["opacity"]=self.point1Slider.value()
+            p2["value"]=self.point1spinBox.value()
+            p2["opacity"]=self.point1Slider.value()
+            p2["value"]=self.point1spinBox.value()
+            p2["opacity"]=self.point1Slider.value()
+        # On teste si l'utilisateur a choisi un stack de fichiers
+        #Si ce n'est pas le cas on affiche un message d'erreur
+        try:
+            visu.visualisation(wp, bp, MyApp.matrix, p1, p2, p3)
+        except AttributeError:
+            self.warning_text_launch.setText("/!\ Please select files")
+            return 1
  
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
