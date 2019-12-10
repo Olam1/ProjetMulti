@@ -4,6 +4,7 @@ import pylab
 import glob
 import vtk
 import numpy as np
+import matplotlib.pyplot as plt
 # import fenetre_largeur
 
 
@@ -50,7 +51,8 @@ def visualisation (white_point = 30000,
                    matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]]),
                    point_1 = {"value":0, "opacity":0.},
                    point_2 = {"value":0, "opacity":0.},
-                   point_3 = {"value":0, "opacity":0.}):
+                   point_3 = {"value":0, "opacity":0.},
+                   nb_points = 0):
     
     print('visualisation')
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
@@ -80,9 +82,17 @@ def visualisation (white_point = 30000,
     #Create transfer mapping scalar value to opacity
     
     alphaChannelFunc.AddPoint(white_point, 0.0);
-    alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
-    alphaChannelFunc.AddPoint(point_2.get("value"), point_2.get("opacity"));
-    alphaChannelFunc.AddPoint(point_3.get("value"), point_3.get("opacity"));
+    if nb_points == 0:
+        pass
+    elif nb_points == 1:
+        alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
+    elif nb_points == 2:
+        alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
+        alphaChannelFunc.AddPoint(point_2.get("value"), point_2.get("opacity"));
+    else:
+        alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
+        alphaChannelFunc.AddPoint(point_2.get("value"), point_2.get("opacity"));
+        alphaChannelFunc.AddPoint(point_3.get("value"), point_3.get("opacity"));
     alphaChannelFunc.AddPoint(black_point, 1);
     
     # The previous two classes stored properties. Because we want to apply these properties to the volume we want to render,
@@ -134,5 +144,52 @@ def visualisation (white_point = 30000,
     renderInteractor.Start()
     return 0
 
-
+def greyscale_graph(white_point = 30000,
+                   black_point = 65536,
+                   point_1 = {"value":0, "opacity":0.},
+                   point_2 = {"value":0, "opacity":0.},
+                   point_3 = {"value":0, "opacity":0.},
+                   nb_points = 0):
+    print('greyscale_graph')
+    if nb_points == 0:
+        X = [0, white_point, black_point]
+        Y = [0., 0., 1.]
+    elif nb_points == 1:
+        X = [0, white_point, point_1.get("value"), black_point]
+        Y = [0., 0., point_1.get("opacity"), 1.]
+    elif nb_points == 2:
+        X = [0,white_point, point_1.get("value"), point_2.get("value"), black_point]
+        Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
+    else:
+        X = [0, white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
+        Y = [0., 0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
+    plt.figure()
+    plt.axes()
+    plt.plot(X,Y,'bo-')
+    plt.show()
+    return 0
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 #visualisation()
