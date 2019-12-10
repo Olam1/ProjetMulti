@@ -158,8 +158,8 @@ def greyscale_graph(white_point = 30000,
         X = [0, white_point, point_1.get("value"), black_point]
         Y = [0., 0., point_1.get("opacity"), 1.]
     elif nb_points == 2:
-        X = [0,white_point, point_1.get("value"), point_2.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
+        X = [0, white_point, point_1.get("value"), point_2.get("value"), black_point]
+        Y = [0., 0.,point_1.get("opacity"), point_2.get("opacity"), 1.]
     else:
         X = [0, white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
         Y = [0., 0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
