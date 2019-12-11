@@ -32,49 +32,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSpinBox" name="spinBox_width">
-    <property name="geometry">
-     <rect>
-      <x>21</x>
-      <y>170</y>
-      <width>61</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>1081</number>
-    </property>
-    <property name="value">
-     <number>1080</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spinBox_height">
-    <property name="geometry">
-     <rect>
-      <x>21</x>
-      <y>200</y>
-      <width>61</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>721</number>
-    </property>
-    <property name="value">
-     <number>720</number>
-    </property>
-   </widget>
    <widget class="QPushButton" name="launch">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>240</y>
+      <x>150</x>
+      <y>150</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -86,50 +48,11 @@
      <string>Visualisation</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>200</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Heigth</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>150</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Image Size</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>170</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Width</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="warning_text_launch">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>241</y>
+      <x>250</x>
+      <y>151</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -180,8 +103,8 @@
    <widget class="QPushButton" name="select_file">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>40</y>
+      <x>160</x>
+      <y>70</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -193,8 +116,8 @@
    <widget class="QLabel" name="warning_text_select_file">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>40</y>
+      <x>250</x>
+      <y>70</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -437,13 +360,21 @@
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="Label_loader">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>200</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>groupBox</zorder>
-   <zorder>spinBox_width</zorder>
-   <zorder>spinBox_height</zorder>
    <zorder>launch</zorder>
-   <zorder>label</zorder>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
    <zorder>warning_text_launch</zorder>
    <zorder>spinBox_white_point</zorder>
    <zorder>label_4</zorder>
@@ -453,6 +384,7 @@
    <zorder>add_point</zorder>
    <zorder>point1Slider</zorder>
    <zorder>spinBox_black_point</zorder>
+   <zorder>Label_loader</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
