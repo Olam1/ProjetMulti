@@ -66,9 +66,9 @@ def afficher(self):
   
     
 #Afficher la graph contenant la courbe d'opacité des différents niveaux de gris
-def voir_graph(self):
+def afficher_graph(self):
     wp, bp, p1, p2, p3 =LirePoints.Do(self)
-    fig = visu.greyscale_graph(wp, bp, p1, p2, p3, self.nb_points)
+    fig = visu.creer_graph(wp, bp, p1, p2, p3, self.nb_points)
     self.plotWidget = FigureCanvas(fig)
     lay = QtWidgets.QVBoxLayout(self.content_plot)  
     lay.setContentsMargins(0, 0, 0, 0)      

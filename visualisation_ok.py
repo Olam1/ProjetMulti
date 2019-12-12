@@ -143,12 +143,13 @@ def visualisation (white_point = 30000,
     renderInteractor.Start()
     return 0
 
-def greyscale_graph(white_point = 30000,
-                   black_point = 65536,
-                   point_1 = {"value":0, "opacity":0.},
-                   point_2 = {"value":0, "opacity":0.},
-                   point_3 = {"value":0, "opacity":0.},
-                   nb_points = 0):
+
+def creer_graph(white_point = 30000,
+                black_point = 65536,
+                point_1 = {"value":0, "opacity":0.},
+                point_2 = {"value":0, "opacity":0.},
+                point_3 = {"value":0, "opacity":0.},
+                nb_points = 0):
     if nb_points == 0:
         X = [white_point, black_point]
         Y = [0., 1.]
@@ -160,17 +161,10 @@ def greyscale_graph(white_point = 30000,
         Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
     else:
         X = [white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
-   
-    #data = np.array([0.7,0.7,0.7,0.8,0.9,0.9,1.5,1.5,1.5,1.5])        
+        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]   
     fig, ax1 = plt.subplots()
-    #bins = np.arange(0.6, 1.62, 0.02)
     ax1.plot(X,Y,'bo-')
     ax1.set_xlim(-1000, 70000)
-    #plt.figure()
-    #plt.axes()
-    #fig = plt.plot(X,Y,'bo-')
-    #plt.show()
     return fig
     
     

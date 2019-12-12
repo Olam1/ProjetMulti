@@ -18,7 +18,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType("user_interface.ui")
 # et "Ui_MainWindow"
 class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
 
-    from MethodesClasseIG import ajouter_points, choix_fichier, afficher, voir_graph
+    from MethodesClasseIG import ajouter_points, choix_fichier, afficher, afficher_graph
     #Defiition du constructeur de la classe
     def __init__(self):
         #Initialisation de la classe parent QMainWindow
@@ -34,7 +34,7 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         self.select_file.clicked.connect(self.choix_fichier)
         self.launch.clicked.connect(self.afficher)
         self.add_point.clicked.connect(self.ajouter_points)
-        self.update_graph.clicked.connect(self.voir_graph)
+        self.update_graph.clicked.connect(self.afficher_graph)
     
     
    
