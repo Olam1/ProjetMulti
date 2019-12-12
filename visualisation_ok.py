@@ -1,5 +1,4 @@
 import os
-import sys
 import pylab
 import glob
 import vtk
@@ -54,8 +53,7 @@ def visualisation (white_point = 30000,
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
                    nb_points = 0):
-    
-    print('visualisation')
+
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
     # imports raw data and stores it.
     dataImporter = vtk.vtkImageImport()
@@ -151,24 +149,30 @@ def greyscale_graph(white_point = 30000,
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
                    nb_points = 0):
-    print('greyscale_graph')
     if nb_points == 0:
-        X = [0, white_point, black_point]
-        Y = [0., 0., 1.]
+        X = [white_point, black_point]
+        Y = [0., 1.]
     elif nb_points == 1:
-        X = [0, white_point, point_1.get("value"), black_point]
-        Y = [0., 0., point_1.get("opacity"), 1.]
+        X = [white_point, point_1.get("value"), black_point]
+        Y = [0., point_1.get("opacity"), 1.]
     elif nb_points == 2:
-        X = [0, white_point, point_1.get("value"), point_2.get("value"), black_point]
-        Y = [0., 0.,point_1.get("opacity"), point_2.get("opacity"), 1.]
+        X = [white_point, point_1.get("value"), point_2.get("value"), black_point]
+        Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
     else:
-        X = [0, white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
-        Y = [0., 0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
-    plt.figure()
-    plt.axes()
-    plt.plot(X,Y,'bo-')
-    plt.show()
-    return 0
+        X = [white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
+        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
+   
+    #data = np.array([0.7,0.7,0.7,0.8,0.9,0.9,1.5,1.5,1.5,1.5])        
+    fig, ax1 = plt.subplots()
+    #bins = np.arange(0.6, 1.62, 0.02)
+    ax1.plot(X,Y,'bo-')
+    ax1.set_xlim(-1000, 70000)
+    #plt.figure()
+    #plt.axes()
+    #fig = plt.plot(X,Y,'bo-')
+    #plt.show()
+    return fig
+    
     
     
     

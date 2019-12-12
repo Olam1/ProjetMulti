@@ -1,40 +1,49 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 29 15:55:37 2019
 
-@author: malot
-"""
 
 import sys
-from PyQt5 import QtCore, uic, QtWidgets,QtGui
-import visualisation_ok as visu
+from PyQt5 import uic, QtWidgets
+
+import matplotlib
+matplotlib.use('QT5Agg')
 
 
-qtCreatorFile = "user_interface.ui" # Enter file here.
+
+
  
-Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+#Création d'une métaclasse Ui_Mainwindow(je crois ?) associée au fichier xml (ca devient compliqué là mais c'est pas important)
+Ui_MainWindow, QtBaseClass = uic.loadUiType("user_interface.ui")
 
 
-class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
-    # On initialise une variable globale qui contiendra notre 
-    # future matrice d'images
-    matrix = 0
-    nb_points = 0
+#Définition de la class InterfaceGraphique qui hérite des classes "QtWidgets.QMainWindow"
+# et "Ui_MainWindow"
+class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
+
+    from MethodesClasseIG import ajouter_points, choix_fichier, afficher, voir_graph
+    #Defiition du constructeur de la classe
     def __init__(self):
+        #Initialisation de la classe parent QMainWindow
         QtWidgets.QMainWindow.__init__(self)
-        Ui_MainWindow.__init__(self)
+        #Utilisation de la méthode setupUi hérité de la classe Ui_Mainwindow
         self.setupUi(self)
-        self.select_file.clicked.connect(self.FonctionsQt.choix_fichier)
-        self.launch.clicked.connect(self.FonctionsQt.afficher)
-        self.add_point.clicked.connect(self.FonctionsQt.ajouter_point)
+        #Définition d'un attribut nb_points
+        self.nb_points=0
+        #Définition d'un attribut matrix
+        self.matrix=0;
         
-
+        
+        self.select_file.clicked.connect(self.choix_fichier)
+        self.launch.clicked.connect(self.afficher)
+        self.add_point.clicked.connect(self.ajouter_points)
+        self.update_graph.clicked.connect(self.voir_graph)
+    
+    
+   
   
 
  
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MyApp()
+    window = InterfaceGraphique()
     window.show()
     sys.exit(app.exec_())
     
