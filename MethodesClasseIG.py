@@ -27,7 +27,6 @@ def ajouter_points(self):
     
 #Reçoit un dossier contenant les TIF et renvoie une matrice
 def choix_fichier(self):
-    print('choix_fichier')
     # L'utilisateur choisi le dossier dans lequel se trouve les fichiers
     path = QtWidgets.QFileDialog.getExistingDirectory(
             self,
@@ -37,7 +36,7 @@ def choix_fichier(self):
     self.warning_text_select_file.clear()
     if path:
         try:
-            self.matrix = visu.file_choice(path)
+            self.matrix = visu.MatrixGeneration(path+'/*.tif')
         except IndexError:
             self.warning_text_select_file.setText("/!\ Please select another folder")
             return 1
@@ -46,10 +45,12 @@ def choix_fichier(self):
 #Ouvre la fenêtre conteant la visualisation en 3D de l'objet
 def afficher(self):
     self.warning_text_launch.clear()
+    #On récupère les données des points du graph
     wp, bp, p1, p2, p3 =LirePoints.Do(self)
-    visu.greyscale_graph(wp, bp, p1, p2, p3, self.nb_points)
     #On charge le gif contenant l'icône de chargement
     Loader = QtGui.QMovie("loader.gif")
+    #On affiche le graph mis à jour
+    self.voir_graph()
     #On met la fenêtre principale en pause
     WindowStandby.PauseWindow(self, Loader)
     # On teste si l'utilisateur a choisi un stack de fichiers

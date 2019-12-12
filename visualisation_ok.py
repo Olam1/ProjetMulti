@@ -5,12 +5,9 @@ import vtk
 import numpy as np
 import matplotlib.pyplot as plt
 
-# import fenetre_largeur
 
-
-#Function that open all the images of a folder and save them in a images list
-def imageread(filePath):
-    print('imageread')    
+#Ouvre toutes les ficheirs d'un dossier et genère un volume constitué de l'empilement de toutes les slices 2D
+def MatrixGeneration(filePath):   
     filenames = [img for img in glob.glob(filePath)]
     filenames.sort()
 
@@ -19,32 +16,22 @@ def imageread(filePath):
     h = len(filenames)
     print ('width, depth, height : ',w,d,h)
 
-    volume = np.zeros((d, w, h), dtype=np.uint16)
+    matrix = np.zeros((d, w, h), dtype=np.uint16)
     k=0
-#    fenetre_largeur.MyApp.__init__(fenetre_largeur.MyApp)
-#    dim=fenetre_largeur.MyApp.afficher(fenetre_largeur.MyApp)  #726x198
-    for img in filenames: #assuming tif     
+    for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
         
         if im.shape != (d, w): #1d2w
             print('Image with an unexpected size')
             return 1
         
-        volume[:,:,k] = im
+        matrix[:,:,k] = im
         k+=1
-    return volume
+    return matrix
+        
+    
 
-#We create the data we want to render. We create a 3D-image by a X-ray CT-scan made to an object. We store the values of each
-#slice and we complete the volume with them in the z axis
-def file_choice(path):
-    print('file_choice')
-    #We order all the directories by name
-    tulip_files = [t for t in os.listdir(path)]
-    tulip_files.sort() #the os.listdir function do not give the files in the right order so we need to sort them
-    matrix_full = imageread(path+'/*.tif')
-    return matrix_full
-
-
+#Fonction qui ouvre une fenêtre affichant un rendu 3D de l'objet 
 
 def visualisation (white_point = 30000,
                    black_point = 65536,
@@ -53,33 +40,30 @@ def visualisation (white_point = 30000,
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
                    nb_points = 0):
-
-    # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
-    # imports raw data and stores it.
+    #Création d'un objet VtkImage qui pourra être traité par la suite
     dataImporter = vtk.vtkImageImport()
-    # The previously created array is converted to a string of chars and imported.
+    # La matrice est convertie en un string
     data_string = matrix_full.tostring()
     dataImporter.CopyImportVoidPointer(data_string, len(data_string))
-    # The type of the newly imported data is set to unsigned short (uint16)
+    # Changement du type de donnée
     dataImporter.SetDataScalarTypeToUnsignedShort()
-    # Because the data that is imported only contains an intensity value (it isnt RGB-coded or someting similar), the importer
-    # must be told this is the case.
+    #On précise que ce sont des données en niveau de gris et pas couleurs
     dataImporter.SetNumberOfScalarComponents(1)
     
-    # The following two functions describe how the data is stored and the dimensions of the array it is stored in.
+    # On explicite la manière dont les données sont stockées et les dimensions de la matrice
     w, d, h = matrix_full.shape
     dataImporter.SetDataExtent(0, h-1, 0, d-1, 0, w-1)
     dataImporter.SetWholeExtent(0, h-1, 0, d-1, 0, w-1) 
-    # This class stores color data and can create color tables from a few color points.
+    # Création d'un object qui spécifie les paramètre de couleur
     colorFunc = vtk.vtkPiecewiseFunction()
+    #On ajoute les deux points par défaut d'intensité aux deux extremes de niveaux de gris
     colorFunc.AddPoint(0, 0.0);
     colorFunc.AddPoint(65536, 1);
     
-    # The following class is used to store transparency-values for later retrieval.
-    
+    #Creation d'un objet qui gère l'opacité
     alphaChannelFunc = vtk.vtkPiecewiseFunction()
-    #Create transfer mapping scalar value to opacity
     
+    #On défini les différents niveaux d'opacité selon les points entrés par l'utilisateur
     alphaChannelFunc.AddPoint(white_point, 0.0);
     if nb_points == 0:
         pass
@@ -94,52 +78,49 @@ def visualisation (white_point = 30000,
         alphaChannelFunc.AddPoint(point_3.get("value"), point_3.get("opacity"));
     alphaChannelFunc.AddPoint(black_point, 1);
     
-    # The previous two classes stored properties. Because we want to apply these properties to the volume we want to render,
-    # we have to store them in a class that stores volume properties.
+    #Creation d'un objet qui prend en charge les propriétés du volume, on lui passe les propriétes définies précedemment
     volumeProperty = vtk.vtkVolumeProperty()
     volumeProperty.SetColor(colorFunc)
     volumeProperty.SetScalarOpacity(alphaChannelFunc)
-    #volumeProperty.ShadeOn();
+
     
-    # This class describes how the volume is rendered (through ray tracing).
-    #compositeFunc = vtk.vtkFixedPointVolumeRayCastCompositeHelper()
-    # We can finally create our volume. We also have to specify the data for it, as well as how the data will be rendered.
+    # Creation de l'objet volume
     volumeMapper = vtk.vtkFixedPointVolumeRayCastMapper()
-    volumeMapper.SetMaximumImageSampleDistance(0.01) # function to reduce the spacing between each image
-    #volumeMapper.SetVolumeRayCastFunction(compositeFunc)
+    #On fixe la distance entre deux images du volume
+    volumeMapper.SetMaximumImageSampleDistance(0.01) 
+    #On passe les données au volume crée
     volumeMapper.SetInputConnection(dataImporter.GetOutputPort())
     
-    # The class vtkVolume is used to pair the previously declared volume as well as the properties to be used when rendering that volume.
+    # Cration d'un autre objet volume qui combine le volume crée avant avec les propriétés de l'obet volumeProperty
     volume = vtk.vtkVolume()
     volume.SetMapper(volumeMapper)
     volume.SetProperty(volumeProperty)
     
-    # With almost everything else ready, its time to initialize the renderer and window, as well as creating a method for exiting the application
+    # Creation de la fenetre de rendu
     renderer = vtk.vtkRenderer()
     renderWin = vtk.vtkRenderWindow()
     renderWin.AddRenderer(renderer)
     renderInteractor = vtk.vtkRenderWindowInteractor()
     renderInteractor.SetRenderWindow(renderWin)
     
-    # We add the volume to the renderer ...
+    # On ajoute le volume au rendu
     renderer.AddVolume(volume)
-    # ... set background color to white ...
+    # On choisi la couleur de l'arrière plan, ici blanc
     renderer.SetBackground(1,1,1)
-    # ... and set window size.
+    #On choisi la taille de la fenetre 
     renderWin.SetSize(520, 603)
     renderWin.SetMultiSamples(4)
     
-    # A simple function to be called when the user decides to quit the application.
+    # Fonction à appeller lorsque l'on souhaite quitter l'application
     def exitCheck(obj, event):
         if obj.GetEventPending() != 0:
             obj.SetAbortRender(1)
     
-    # Tell the application to use the function as an exit check.
+    # On utilise la fonction précédent quand la fenetre est fermée
     renderWin.AddObserver("AbortCheckEvent", exitCheck)
     
     renderInteractor.Initialize()
-    # Because nothing will be rendered without any input, we order the first render manually before control is handed over to the main-loop.
-    renderWin.Render()
+    # On initialise le rendu avant de lancer la fenetre
     renderInteractor.Start()
     return 0
 
