@@ -1,5 +1,4 @@
 import os
-import sys
 import pylab
 import glob
 import vtk
@@ -54,8 +53,7 @@ def visualisation (white_point = 30000,
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
                    nb_points = 0):
-    
-    print('visualisation')
+
     # For VTK to be able to use the data, it must be stored as a VTK-image. This can be done by the vtkImageImport-class which
     # imports raw data and stores it.
     dataImporter = vtk.vtkImageImport()
@@ -151,7 +149,6 @@ def greyscale_graph(white_point = 30000,
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
                    nb_points = 0):
-    print('greyscale_graph')
     if nb_points == 0:
         X = [white_point, black_point]
         Y = [0., 1.]
