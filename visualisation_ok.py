@@ -20,16 +20,10 @@ def MatrixGeneration(filePath):
     k=0
     for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
-        
-        if im.shape != (d, w): 
-            print('Image with an unexpected size')
-            return 1
-        
         matrix[:,:,k] = im
         k+=1
     return matrix
         
-    
 
 #Fonction qui ouvre une fenêtre affichant un rendu 3D de l'objet 
 def visualisation (white_point = 30000,
@@ -98,6 +92,7 @@ def visualisation (white_point = 30000,
     # Creation de la fenetre de rendu
     renderer = vtk.vtkRenderer()
     renderWin = vtk.vtkRenderWindow()
+    
     renderWin.AddRenderer(renderer)
     renderInteractor = vtk.vtkRenderWindowInteractor()
     renderInteractor.SetRenderWindow(renderWin)
@@ -107,8 +102,10 @@ def visualisation (white_point = 30000,
     # On choisi la couleur de l'arrière plan, ici blanc
     renderer.SetBackground(1,1,1)
     #On choisi la taille de la fenetre 
-    renderWin.SetSize(520, 603)
-    renderWin.SetMultiSamples(4)
+    renderWin.SetSize(700, 700)
+    renderWin.SetWindowName("test")
+    #renderWin.SetMultiSamples(4)
+    
     
     # Fonction à appeller lorsque l'on souhaite quitter l'application
     def exitCheck(obj, event):
@@ -117,7 +114,7 @@ def visualisation (white_point = 30000,
     
     # On utilise la fonction précédent quand la fenetre est fermée
     renderWin.AddObserver("AbortCheckEvent", exitCheck)
-    
+       
     renderInteractor.Initialize()
     # On initialise le rendu avant de lancer la fenetre
     renderInteractor.Start()
