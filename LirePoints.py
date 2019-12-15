@@ -1,5 +1,5 @@
 
-#Fonction qui eçoit un objet de type "InterfaceGraphique" en paramètre
+#Fonction qui reçoit un objet de type "InterfaceGraphique" en paramètre
 #Récupère les points d'intensité à différents niveau de gris, entrés par l'utilisateur
 #Retourne une liste de points avec leur valeur et opacité
 

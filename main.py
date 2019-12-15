@@ -30,7 +30,7 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         #Définition d'un attribut matrix
         self.matrix=0;
         
-        
+        self.statusbar.showMessage("Bienvenue")
         self.select_file.clicked.connect(self.choix_fichier)
         self.launch.clicked.connect(self.afficher)
         self.add_point.clicked.connect(self.ajouter_points)

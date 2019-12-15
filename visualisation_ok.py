@@ -21,7 +21,7 @@ def MatrixGeneration(filePath):
     for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
         
-        if im.shape != (d, w): #1d2w
+        if im.shape != (d, w): 
             print('Image with an unexpected size')
             return 1
         
@@ -32,7 +32,6 @@ def MatrixGeneration(filePath):
     
 
 #Fonction qui ouvre une fenêtre affichant un rendu 3D de l'objet 
-
 def visualisation (white_point = 30000,
                    black_point = 65536,
                    matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]]),
@@ -124,7 +123,7 @@ def visualisation (white_point = 30000,
     renderInteractor.Start()
     return 0
 
-
+#Cree un graph matplotlib et le retourne à partir des points
 def creer_graph(white_point = 30000,
                 black_point = 65536,
                 point_1 = {"value":0, "opacity":0.},
