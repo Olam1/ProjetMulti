@@ -88,15 +88,13 @@ def afficher(self):
         volume = visu.visualisation(wp, bp, self.matrix, p1, p2, p3, self.nb_points)
     except AttributeError:
         gestion_message(self, 112)
-        #WindowStandby.RestartWindow(self, Loader)
         return 1
     
- 
     self.renderer.AddVolume(volume)
     self.renderer.ResetCamera()
     self.renderer.SetBackground(1,1,1)
     self.object_plot.setLayout(self.object_layout)
-
+    
     self.show()
     self.iren.Initialize()
     self.iren.Start()
@@ -137,7 +135,7 @@ def gestion_message(self, codeErreur = 100):
         msg.setText("Image with an unexpected size")
         msg.exec()
     elif codeErreur == 114:
-        self.statusbar.showMessage("Screenshot done", 2000)
+        self.statusbar.showMessage("Screenshot done", 4000)
     else:
         self.statusbar.showMessage("Unknown error")
 

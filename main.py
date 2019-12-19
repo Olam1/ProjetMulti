@@ -1,4 +1,6 @@
 
+#Logo : 3d 360 rotation by Dekin Dorcas from the Noun Project
+
 import sys
 from PyQt5 import uic, QtWidgets
 

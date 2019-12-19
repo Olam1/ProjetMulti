@@ -29,10 +29,20 @@
    <cursorShape>ArrowCursor</cursorShape>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>TomoX - INSA</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>logo.png</normaloff>logo.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>24</width>
+    <height>24</height>
+   </size>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="launch">
@@ -401,7 +411,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>731</width>
+       <width>681</width>
        <height>281</height>
       </rect>
      </property>
