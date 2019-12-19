@@ -1,12 +1,6 @@
 
-
 import sys
 from PyQt5 import uic, QtWidgets
-
-import matplotlib
-matplotlib.use('QT5Agg')
-
-
 
 
  
@@ -19,6 +13,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType("user_interface.ui")
 class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
 
     from MethodesClasseIG import ajouter_points, choix_fichier, afficher, afficher_graph, retirer_points, capture
+    #from MethodeUpdateGraph import update_graph
     #Defiition du constructeur de la classe
     def __init__(self):
         #Initialisation de la classe parent QMainWindow
@@ -30,14 +25,29 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         #Définition d'un attribut matrix
         self.matrix=0;
         
+        self.afficher_graph()
+        
         self.select_file.clicked.connect(self.choix_fichier)
         self.launch.clicked.connect(self.afficher)
         self.add_point.clicked.connect(self.ajouter_points)
         self.remove_point.clicked.connect(self.retirer_points)
-        self.update_graph.clicked.connect(self.afficher_graph)
+        #self.update_graph.clicked.connect(self.afficher_graph)
         self.screenshot.clicked.connect(self.capture)
-    
-    
+        
+        #Si un paramètre est changé on met le graphique à jour
+        self.spinBox_black_point.valueChanged.connect(self.afficher_graph)
+        self.spinBox_white_point.valueChanged.connect(self.afficher_graph)
+        self.add_point.clicked.connect(self.afficher_graph)
+        self.remove_point.clicked.connect(self.afficher_graph)
+        self.point1spinBox.valueChanged.connect(self.afficher_graph)
+        self.point2spinBox.valueChanged.connect(self.afficher_graph)
+        self.point3spinBox.valueChanged.connect(self.afficher_graph)
+        self.point1Slider.valueChanged.connect(self.afficher_graph)
+        self.point2Slider.valueChanged.connect(self.afficher_graph)
+        self.point3Slider.valueChanged.connect(self.afficher_graph) 
+        
+        
+        
    
   
 

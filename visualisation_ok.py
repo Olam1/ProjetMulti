@@ -1,4 +1,3 @@
-import os
 import pylab
 import glob
 import vtk
@@ -88,39 +87,10 @@ def visualisation (white_point = 30000,
     volume = vtk.vtkVolume()
     volume.SetMapper(volumeMapper)
     volume.SetProperty(volumeProperty)
-    
-    # Creation de la fenetre de rendu
-    renderer = vtk.vtkRenderer()
-    renderWin = vtk.vtkRenderWindow()
-    
-    renderWin.AddRenderer(renderer)
-    renderInteractor = vtk.vtkRenderWindowInteractor()
-    renderInteractor.SetRenderWindow(renderWin)
-    
-    # On ajoute le volume au rendu
-    renderer.AddVolume(volume)
-    # On choisi la couleur de l'arrière plan, ici blanc
-    renderer.SetBackground(1,1,1)
-    #On choisi la taille de la fenetre 
-    renderWin.SetSize(700, 700)
-    renderWin.SetWindowName("test")
-    #renderWin.SetMultiSamples(4)
-    
-    
-    # Fonction à appeller lorsque l'on souhaite quitter l'application
-    def exitCheck(obj, event):
-        if obj.GetEventPending() != 0:
-            obj.SetAbortRender(1)
-    
-    # On utilise la fonction précédent quand la fenetre est fermée
-    renderWin.AddObserver("AbortCheckEvent", exitCheck)
-       
-    renderInteractor.Initialize()
-    # On initialise le rendu avant de lancer la fenetre
-    renderInteractor.Start()
-    return 0
+    return volume
 
-#Cree un graph matplotlib et le retourne à partir des points
+
+#Crée un graph matplotlib et le retourne à partir des points
 def creer_graph(white_point = 30000,
                 black_point = 65536,
                 point_1 = {"value":0, "opacity":0.},
@@ -138,7 +108,12 @@ def creer_graph(white_point = 30000,
         Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
     else:
         X = [white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]   
+        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
+    #On efface les figure précédente pour ne pas saturer la mémoire
+    plt.cla()
+    plt.clf()
+    plt.close()
+    #On crée un objet fig qui contient notre graph et on le retourne
     fig, ax1 = plt.subplots()
     ax1.plot(X,Y,'bo-')
     ax1.set_xlim(-1000, 70000)

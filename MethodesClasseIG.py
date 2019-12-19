@@ -1,11 +1,11 @@
-from PyQt5 import QtWidgets,QtGui
+import os
+from PyQt5 import QtWidgets
 import visualisation_ok as visu
-import WindowStandby
+#import WindowStandby
 import LirePoints
 from matplotlib.backends.backend_qt5agg import FigureCanvas 
-from PIL import ImageGrab
-import win32gui
-
+import vtk
+from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
 #Fichier contenant les méthodes de la classe InterfaceGraphique 
@@ -49,6 +49,7 @@ def choix_fichier(self):
     path = QtWidgets.QFileDialog.getExistingDirectory(
             self,
             "Open a folder",
+            os.sep.join((os.path.expanduser('~'), 'Desktop')), #Permet d'afficher le bureau à l'ouverture de la fenêtre
             options = QtWidgets.QFileDialog.ShowDirsOnly
             )
     #Gestion de l'exception dans le cas où l'utilisateur choisit un mauvais dossier
@@ -64,25 +65,40 @@ def choix_fichier(self):
             return 1
         return self.matrix
 
+
 #Ouvre la fenêtre conteant la visualisation en 3D de l'objet
 def afficher(self):
-    gestion_message(self, 100)
+    #On efface tous les widgets présents dans le layout 'lay'
+    for i in reversed(range(self.vl.count())): 
+        self.vl.itemAt(i).widget().deleteLater()
+        
+    self.vtkWidget = QVTKRenderWindowInteractor(self.object_plot)
+    self.vl.addWidget(self.vtkWidget)
+
+    self.renderer = vtk.vtkRenderer()
+    self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
+    self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
+    
     #On récupère les données des points du graph
     wp, bp, p1, p2, p3 =LirePoints.Do(self)
-    #On charge le gif contenant l'icône de chargement
-    Loader = QtGui.QMovie("loader.gif")
-    #On met la fenêtre principale en pause
-    #WindowStandby.PauseWindow(self, Loader)
     #On teste si l'utilisateur a choisi un stack de fichiers
     #Si ce n'est pas le cas on affiche un message d'erreur
     try:
-        visu.visualisation(wp, bp, self.matrix, p1, p2, p3, self.nb_points)
+        volume = visu.visualisation(wp, bp, self.matrix, p1, p2, p3, self.nb_points)
     except AttributeError:
         gestion_message(self, 112)
         #WindowStandby.RestartWindow(self, Loader)
         return 1
-    #On réactive la fenêtre principale
-    #WindowStandby.RestartWindow(self, Loader)
+    
+ 
+    self.renderer.AddVolume(volume)
+    self.renderer.ResetCamera()
+    self.renderer.SetBackground(1,1,1)
+    self.object_plot.setLayout(self.vl)
+
+    self.show()
+    self.iren.Initialize()
+    self.iren.Start()
     return 0
   
     
@@ -106,56 +122,34 @@ def gestion_message(self, codeErreur = 100):
     msg = QtWidgets.QMessageBox()
     msg.setIcon(2)
     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+    msg.setWindowTitle("Warning")
     self.statusbar.clearMessage()
     if codeErreur == 100:
         self.statusbar.clearMessage()
     elif codeErreur == 111:
         msg.setText("Please select another folder")
         msg.exec()
-        #self.statusbar.showMessage("Please select another folder")
     elif codeErreur == 112:
-        self.statusbar.showMessage("Please select files")
+        msg.setText("Please select files")
+        msg.exec()
     elif codeErreur == 113:
-        self.statusbar.showMessage("Image with an unexpected size")
+        msg.setText("Image with an unexpected size")
+        msg.exec()
     elif codeErreur == 114:
         self.statusbar.showMessage("Screenshot done", 2000)
     elif codeErreur == 115:
-        self.statusbar.showMessage("There is no visualisation to capture")
+        msg.setText("There is no visualisation to capture")
+        msg.exec()
     else:
         self.statusbar.showMessage("Unknown error")
+
     
     
 def capture(self):
-    hwnd = win32gui.FindWindow(None,"Visualization Toolkit - Win32OpenGL #1")
-    try:
-        rect = win32gui.GetWindowRect(hwnd)
-    except:
-        gestion_message(self, 115)
-        return 1
-    left = rect[0]
-    top = rect[1]
-    right = rect[2]
-    bottom = rect[3]
-    win32gui.SetForegroundWindow(hwnd)
-    img = ImageGrab.grab(bbox = (left, top, right, bottom))
-    path = QtWidgets.QFileDialog.getExistingDirectory(
-            self,
-            "Save your screenshot",
-            options = QtWidgets.QFileDialog.ShowDirsOnly
-            )
-    #Gestion de l'exception dans le cas où l'utilisateur choisit un mauvais dossier
-    #Si aucun dossier n'est sélectionné path = 0 et il ne se passe rien
-    if path:
-        img.save(path+"/visualisation.jpg", "JPEG")
-        gestion_message(self, 114)
-    
-    
-    
-    
-    
-    
-    
-    
+    file = QtWidgets.QFileDialog.getSaveFileName(self,
+                                                 'Save Image As', os.sep.join((os.path.expanduser('~'), 'Desktop')), #Permet d'afficher le bureau à l'ouverture de la fenêtre
+                                                 "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
+    self.object_plot.grab().save(file[0]);
     
     
     
