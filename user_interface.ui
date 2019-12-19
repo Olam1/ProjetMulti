@@ -405,7 +405,7 @@
        <height>281</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="lay"/>
+     <layout class="QVBoxLayout" name="graph_layout"/>
     </widget>
    </widget>
    <widget class="QPushButton" name="screenshot">
@@ -442,11 +442,7 @@
        <height>491</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="vl">
-      <item>
-       <widget class="QWidget" name="vtkWidget" native="true"/>
-      </item>
-     </layout>
+     <layout class="QVBoxLayout" name="object_layout"/>
     </widget>
    </widget>
    <zorder>groupBox</zorder>

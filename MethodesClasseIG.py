@@ -68,12 +68,13 @@ def choix_fichier(self):
 
 #Ouvre la fenêtre conteant la visualisation en 3D de l'objet
 def afficher(self):
-    #On efface tous les widgets présents dans le layout 'lay'
-    for i in reversed(range(self.vl.count())): 
-        self.vl.itemAt(i).widget().deleteLater()
-        
+    #On efface tous les widgets présents dans le layout 'object_layout'
+    for i in reversed(range(self.object_layout.count())): 
+        self.object_layout.itemAt(i).widget().deleteLater()
+    
+    #On crée le widget qui contient la fenetre interactive et on l'ajoute au layout    
     self.vtkWidget = QVTKRenderWindowInteractor(self.object_plot)
-    self.vl.addWidget(self.vtkWidget)
+    self.object_layout.addWidget(self.vtkWidget)
 
     self.renderer = vtk.vtkRenderer()
     self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
@@ -94,7 +95,7 @@ def afficher(self):
     self.renderer.AddVolume(volume)
     self.renderer.ResetCamera()
     self.renderer.SetBackground(1,1,1)
-    self.object_plot.setLayout(self.vl)
+    self.object_plot.setLayout(self.object_layout)
 
     self.show()
     self.iren.Initialize()
@@ -104,16 +105,16 @@ def afficher(self):
     
 #Afficher la graph contenant la courbe d'opacité des différents niveaux de gris
 def afficher_graph(self):
-    #On efface tous les widgets présents dans le layout 'lay'
-    for i in reversed(range(self.lay.count())): 
-        self.lay.itemAt(i).widget().deleteLater()
+    #On efface tous les widgets présents dans le layout 'graph_layout'
+    for i in reversed(range(self.graph_layout.count())): 
+        self.graph_layout.itemAt(i).widget().deleteLater()
     #On lit les points à afficher et on cree le graph à partir de ces points
     wp, bp, p1, p2, p3 = LirePoints.Do(self)
     fig = visu.creer_graph(wp, bp, p1, p2, p3, self.nb_points)
     #FigureCanvas permet de transformer le graph matplotliq en graph Qt
     self.plotWidget = FigureCanvas(fig)
     #On ajoute le widget contenant le graph dans le layout  
-    self.lay.addWidget(self.plotWidget)
+    self.graph_layout.addWidget(self.plotWidget)
     return 0
 
 
@@ -137,9 +138,6 @@ def gestion_message(self, codeErreur = 100):
         msg.exec()
     elif codeErreur == 114:
         self.statusbar.showMessage("Screenshot done", 2000)
-    elif codeErreur == 115:
-        msg.setText("There is no visualisation to capture")
-        msg.exec()
     else:
         self.statusbar.showMessage("Unknown error")
 
@@ -150,7 +148,7 @@ def capture(self):
                                                  'Save Image As', os.sep.join((os.path.expanduser('~'), 'Desktop')), #Permet d'afficher le bureau à l'ouverture de la fenêtre
                                                  "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
     self.object_plot.grab().save(file[0]);
-    
+    gestion_message(self, 114)
     
     
     
