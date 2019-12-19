@@ -103,11 +103,16 @@ def afficher_graph(self):
 
 #Permet d'afficher des massages d'erreur dans la barre de statut
 def gestion_message(self, codeErreur = 100):
+    msg = QtWidgets.QMessageBox()
+    msg.setIcon(2)
+    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
     self.statusbar.clearMessage()
     if codeErreur == 100:
         self.statusbar.clearMessage()
     elif codeErreur == 111:
-        self.statusbar.showMessage("Please select another folder")
+        msg.setText("Please select another folder")
+        msg.exec()
+        #self.statusbar.showMessage("Please select another folder")
     elif codeErreur == 112:
         self.statusbar.showMessage("Please select files")
     elif codeErreur == 113:
