@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Fonctions permettant de mettre en pause et redémarer la fenêtre graphique Qt
 #Elle devient inaccessible pendant que la fenêtre de visualisation est active
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pylab
 import glob
 import vtk
@@ -13,15 +14,14 @@ def MatrixGeneration(filePath):
     temp = pylab.imread(filenames[0])
     d, w = temp.shape
     h = len(filenames)
-    print ('width, depth, height : ',w,d,h)
-
     matrix = np.zeros((d, w, h), dtype=np.uint16)
     k=0
     for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
         matrix[:,:,k] = im
         k+=1
-    return matrix
+    result = [matrix, w, d, h]
+    return result
         
 
 #Fonction qui ouvre une fenêtre affichant un rendu 3D de l'objet 
@@ -49,8 +49,8 @@ def visualisation (white_point = 30000,
     # Création d'un object qui spécifie les paramètre de couleur
     colorFunc = vtk.vtkPiecewiseFunction()
     #On ajoute les deux points par défaut d'intensité aux deux extremes de niveaux de gris
-    colorFunc.AddPoint(0, 0.0);
-    colorFunc.AddPoint(65536, 1);
+    colorFunc.AddPoint(white_point, 0.0);
+    colorFunc.AddPoint(black_point, 1);
     
     #Creation d'un objet qui gère l'opacité
     alphaChannelFunc = vtk.vtkPiecewiseFunction()

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from PyQt5 import QtWidgets
 import visualisation_ok as visu
@@ -56,13 +57,14 @@ def choix_fichier(self):
     #Si aucun dossier n'est sélectionné path = 0 et il ne se passe rien
     if path:
         try:
-            self.matrix = visu.MatrixGeneration(path+'/*.tif')
+            self.matrix, w, d, h = visu.MatrixGeneration(path+'/*.tif')
         except IndexError:
             gestion_message(self, 111)
             return 1
         except ValueError:
             gestion_message(self, 113)
             return 1
+        gestion_message(self, 115, str(w),str(d),str(h))
         return self.matrix
 
 
@@ -117,7 +119,7 @@ def afficher_graph(self):
 
 
 #Permet d'afficher des massages d'erreur dans la barre de statut
-def gestion_message(self, codeErreur = 100):
+def gestion_message(self, codeErreur = 100, w=0, d=0, h=0):
     msg = QtWidgets.QMessageBox()
     msg.setIcon(2)
     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -135,19 +137,21 @@ def gestion_message(self, codeErreur = 100):
         msg.setText("Image with an unexpected size")
         msg.exec()
     elif codeErreur == 114:
-        self.statusbar.showMessage("Screenshot done", 4000)
+        self.statusbar.showMessage("Screenshot done", 5000)
+    elif codeErreur == 115:
+        self.statusbar.showMessage("width : "+w+" | depth : "+d+" | height : "+h)
     else:
         self.statusbar.showMessage("Unknown error")
+    return 0
 
-    
-    
+
 def capture(self):
     file = QtWidgets.QFileDialog.getSaveFileName(self,
                                                  'Save Image As', os.sep.join((os.path.expanduser('~'), 'Desktop')), #Permet d'afficher le bureau à l'ouverture de la fenêtre
                                                  "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
     self.object_plot.grab().save(file[0]);
     gestion_message(self, 114)
-    
+    return 0
     
     
     
