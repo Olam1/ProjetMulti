@@ -4,11 +4,16 @@
 #Retourne une liste de points avec leur valeur et opacité
 
 def Do(MonInterface):
+        print("bite")
         p1={"value":0, "opacity":0.}
         p2={"value":0, "opacity":0.}
         p3={"value":0, "opacity":0.}
-        wp=MonInterface.spinBox_white_point.value()
-        bp=MonInterface.spinBox_black_point.value()
+        wp={"value":0, "opacity":0.}
+        bp={"value":0, "opacity":0.}
+        wp["value"]=MonInterface.point0spinBox.value()
+        wp["opacity"]=MonInterface.point0Slider.value()/100
+        bp["value"]=MonInterface.point5spinBox.value()
+        bp["opacity"]=MonInterface.point5Slider.value()/100
         if MonInterface.nb_points == 0:
             pass
         elif MonInterface.nb_points == 1:

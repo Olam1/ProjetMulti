@@ -24,6 +24,8 @@ def ajouter_points(self):
     else:
         self.point3Slider.setEnabled(True)
         self.point3spinBox.setEnabled(True)
+    self.point1spinBox.setMinimum(self.point0spinBox.value())
+    self.point1spinBox.setValue(self.point0spinBox.value())  
     return self.nb_points
 
 
@@ -79,15 +81,16 @@ def afficher(self):
     self.object_layout.addWidget(self.vtkWidget)
 
     self.renderer = vtk.vtkRenderer()
+    self.renderer.GlobalWarningDisplayOff() #On cache la fenêtre d'erreur Vtk
     self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
     self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
     
     #On récupère les données des points du graph
-    wp, bp, p1, p2, p3 =LirePoints.Do(self)
+    p0, p5, p1, p2, p3 =LirePoints.Do(self)
     #On teste si l'utilisateur a choisi un stack de fichiers
     #Si ce n'est pas le cas on affiche un message d'erreur
     try:
-        volume = visu.visualisation(wp, bp, self.matrix, p1, p2, p3, self.nb_points)
+        volume = visu.visualisation(self.matrix, p0, p1, p2, p3, p5, self.nb_points)
     except AttributeError:
         gestion_message(self, 112)
         return 1
@@ -105,16 +108,25 @@ def afficher(self):
     
 #Afficher la graph contenant la courbe d'opacité des différents niveaux de gris
 def afficher_graph(self):
+    p0, p5, p1, p2, p3 = LirePoints.Do(self)
+    
     #On efface tous les widgets présents dans le layout 'graph_layout'
     for i in reversed(range(self.graph_layout.count())): 
         self.graph_layout.itemAt(i).widget().deleteLater()
     #On lit les points à afficher et on cree le graph à partir de ces points
-    wp, bp, p1, p2, p3 = LirePoints.Do(self)
-    fig = visu.creer_graph(wp, bp, p1, p2, p3, self.nb_points)
+    #p0, p5, p1, p2, p3 = LirePoints.Do(self)
+    fig = visu.creer_graph(p0, p1, p2, p3, p5,self.nb_points)
     #FigureCanvas permet de transformer le graph matplotliq en graph Qt
     self.plotWidget = FigureCanvas(fig)
     #On ajoute le widget contenant le graph dans le layout  
     self.graph_layout.addWidget(self.plotWidget)
+    
+    '''self.point1spinBox.setMinimum(p0["value"])
+    self.point2spinBox.setMinimum(p1["value"])
+    self.point3spinBox.setMinimum(p2["value"])
+    self.point3spinBox.setMaximum(p5["value"])
+    self.point2spinBox.setMaximum(p3["value"])   
+    self.point1spinBox.setMaximum(p2["value"])'''
     return 0
 
 
@@ -153,7 +165,15 @@ def capture(self):
     gestion_message(self, 114)
     return 0
     
-    
+def ActualiserMinMax(self):
+    p0, p5, p1, p2, p3 =LirePoints.Do(self)
+    self.point1spinBox.setMinimum(p0["value"])
+    self.point2spinBox.setMinimum(p1["value"])
+    self.point3spinBox.setMinimum(p2["value"])
+    self.point3spinBox.setMaximum(p5["value"])
+    self.point2spinBox.setMaximum(p3["value"])   
+    self.point1spinBox.setMaximum(p2["value"])       
+    return 0    
     
     
     

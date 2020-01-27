@@ -25,12 +25,12 @@ def MatrixGeneration(filePath):
         
 
 #Fonction qui ouvre une fenêtre affichant un rendu 3D de l'objet 
-def visualisation (white_point = 30000,
-                   black_point = 65536,
-                   matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]]),
+def visualisation (matrix_full = np.array([[[0,0],[0,0]],[[0,0],[0,0]]]),
+                   point_0 = {"value":0, "opacity":0.},
                    point_1 = {"value":0, "opacity":0.},
                    point_2 = {"value":0, "opacity":0.},
                    point_3 = {"value":0, "opacity":0.},
+                   point_5 = {"value":65536, "opacity":1.},
                    nb_points = 0):
     #Création d'un objet VtkImage qui pourra être traité par la suite
     dataImporter = vtk.vtkImageImport()
@@ -49,14 +49,14 @@ def visualisation (white_point = 30000,
     # Création d'un object qui spécifie les paramètre de couleur
     colorFunc = vtk.vtkPiecewiseFunction()
     #On ajoute les deux points par défaut d'intensité aux deux extremes de niveaux de gris
-    colorFunc.AddPoint(white_point, 0.0);
-    colorFunc.AddPoint(black_point, 1);
+    colorFunc.AddPoint(point_0.get("value"), point_0.get("opacity"));
+    colorFunc.AddPoint(point_5.get("value"), point_5.get("opacity"));
     
     #Creation d'un objet qui gère l'opacité
     alphaChannelFunc = vtk.vtkPiecewiseFunction()
     
     #On défini les différents niveaux d'opacité selon les points entrés par l'utilisateur
-    alphaChannelFunc.AddPoint(white_point, 0.0);
+    alphaChannelFunc.AddPoint(point_0.get("value"), point_0.get("opacity"));
     if nb_points == 0:
         pass
     elif nb_points == 1:
@@ -68,13 +68,12 @@ def visualisation (white_point = 30000,
         alphaChannelFunc.AddPoint(point_1.get("value"), point_1.get("opacity"));
         alphaChannelFunc.AddPoint(point_2.get("value"), point_2.get("opacity"));
         alphaChannelFunc.AddPoint(point_3.get("value"), point_3.get("opacity"));
-    alphaChannelFunc.AddPoint(black_point, 1);
+    alphaChannelFunc.AddPoint(point_5.get("value"), point_5.get("opacity"));
     
     #Creation d'un objet qui prend en charge les propriétés du volume, on lui passe les propriétes définies précedemment
     volumeProperty = vtk.vtkVolumeProperty()
     volumeProperty.SetColor(colorFunc)
     volumeProperty.SetScalarOpacity(alphaChannelFunc)
-
     
     # Creation de l'objet volume
     volumeMapper = vtk.vtkFixedPointVolumeRayCastMapper()
@@ -91,24 +90,24 @@ def visualisation (white_point = 30000,
 
 
 #Crée un graph matplotlib et le retourne à partir des points
-def creer_graph(white_point = 30000,
-                black_point = 65536,
+def creer_graph(point_0 = {"value":0, "opacity":0.},
                 point_1 = {"value":0, "opacity":0.},
                 point_2 = {"value":0, "opacity":0.},
                 point_3 = {"value":0, "opacity":0.},
+                point_5 = {"value":65536, "opacity":1.},
                 nb_points = 0):
     if nb_points == 0:
-        X = [white_point, black_point]
-        Y = [0., 1.]
+        X = [point_0.get("value"), point_5.get("value")]
+        Y = [point_0.get("opacity"), point_5.get("opacity")]
     elif nb_points == 1:
-        X = [white_point, point_1.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), 1.]
+        X = [point_0.get("value"), point_1.get("value"), point_5.get("value")]
+        Y = [point_0.get("opacity"), point_1.get("opacity"), point_5.get("opacity")]
     elif nb_points == 2:
-        X = [white_point, point_1.get("value"), point_2.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), point_2.get("opacity"), 1.]
+        X = [point_0.get("value"), point_1.get("value"), point_2.get("value"), point_5.get("value")]
+        Y = [point_0.get("opacity"), point_1.get("opacity"), point_2.get("opacity"), point_5.get("opacity")]
     else:
-        X = [white_point, point_1.get("value"), point_2.get("value"), point_3.get("value"), black_point]
-        Y = [0., point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), 1.]
+        X = [point_0.get("value"), point_1.get("value"), point_2.get("value"), point_3.get("value"), point_5.get("value")]
+        Y = [point_0.get("opacity"), point_1.get("opacity"), point_2.get("opacity"), point_3.get("opacity"), point_5.get("opacity")]
     #On efface les figure précédente pour ne pas saturer la mémoire
     plt.cla()
     plt.clf()
@@ -117,6 +116,7 @@ def creer_graph(white_point = 30000,
     fig, ax1 = plt.subplots()
     ax1.plot(X,Y,'bo-')
     ax1.set_xlim(-1000, 70000)
+    ax1.set_ylim(-0.1, 1.1)
     return fig
     
     
