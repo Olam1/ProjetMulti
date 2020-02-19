@@ -11,6 +11,7 @@ import pylab
 import glob
 import numpy as np
 from PyQt5 import QtWidgets
+from PIL import Image
 
 #Ouvre toutes les ficheirs d'un dossier et genère un volume constitué de l'empilement de toutes les slices 2D
 def MatrixGeneration(filePath):   
@@ -30,12 +31,13 @@ def MatrixGeneration(filePath):
     result = [matrix, w, d, h]
     matrix = tomopy.minus_log(matrix)
     rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')
-    from PIL import Image
-    for i in range(len(rec)):
-        img = Image.fromarray(rec[i])
-        img.save(str(i) + ".jpeg")
-    #pylab.imshow(rec[64], cmap='gray')
-    #pylab.show()
+    
+    """for i in range(len(rec)):
+        img = Image.fromarray(rec[i], mode='F')
+        img = img.convert("L")
+        img.save(str(i) + ".png", "PNG")"""
+    pylab.imshow(rec[500], cmap='gray')
+    pylab.show()
     return result
 
 #Reçoit un dossier contenant les TIF et renvoie une matrice
