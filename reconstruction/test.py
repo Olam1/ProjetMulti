@@ -5,20 +5,32 @@ Created on Fri Feb  7 13:53:58 2020
 @author: malot
 """
 
-import tomopy
-import pylab
-import time
+import sys
+from PyQt5 import uic, QtWidgets
 
 
-def main():
-    #obj = tomopy.shepp3d()
-    ang = tomopy.angles(180)
-    #sim = tomopy.project(obj, ang)
-    rec = tomopy.recon(sim, ang, algorithm='art')
-    pylab.imshow(rec[64], cmap='gray')
-    pylab.show()
+Ui_MainWindow, QtBaseClass = uic.loadUiType("user_interface_test.ui")
+
+
+class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
+    from Methodes import choix_fichier
+    def __init__(self):
+        #Initialisation de la classe parent QMainWindow
+        QtWidgets.QMainWindow.__init__(self)
+        #Utilisation de la méthode setupUi hérité de la classe Ui_Mainwindow
+        self.setupUi(self)
+        
+        self.selectFile.clicked.connect(self.choix_fichier)
+        
+        
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = InterfaceGraphique()
+    window.show()
+    sys.exit(app.exec_())
 
 
 
-if __name__ == '__main__':
-    main()
+
+#if __name__ == '__main__':
+#    main()
