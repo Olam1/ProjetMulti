@@ -28,9 +28,14 @@ def MatrixGeneration(filePath):
         matrix[:,:,k] = im
         k+=1
     result = [matrix, w, d, h]
-    rec = tomopy.recon(matrix, tomopy.angles(720,0.,360.), algorithm='art')
-    pylab.imshow(rec[64], cmap='gray')
-    pylab.show()
+    matrix = tomopy.minus_log(matrix)
+    rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')
+    from PIL import Image
+    for i in range(len(rec)):
+        img = Image.fromarray(rec[i])
+        img.save(str(i) + ".jpeg")
+    #pylab.imshow(rec[64], cmap='gray')
+    #pylab.show()
     return result
 
 #Reçoit un dossier contenant les TIF et renvoie une matrice
