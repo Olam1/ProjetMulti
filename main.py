@@ -27,8 +27,18 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         #Définition d'un attribut matrix
         self.matrix=0;
         
-        self.afficher_graph()
+        #Creation des menus et actions associées
+        extractAction = QtWidgets.QAction("&Select files", self)
+        extractAction.setShortcut("Ctrl+O")
+        extractAction.setStatusTip('Select file')
+        extractAction.triggered.connect(self.choix_fichier)
         
+        mainMenu = self.menuBar()
+        fileMenu = mainMenu.addMenu('&File')
+        fileMenu.addAction(extractAction)
+        
+        
+        self.afficher_graph()
         self.select_file.clicked.connect(self.choix_fichier)
         self.launch.clicked.connect(self.afficher)
         self.add_point.clicked.connect(self.ajouter_points)
