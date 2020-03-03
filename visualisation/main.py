@@ -54,6 +54,10 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.point1spinBox.setMinimum(self.point0spinBox.value())
         self.point1spinBox.setValue(self.point0spinBox.value())
+        self.point2spinBox.setMinimum(self.point1spinBox.value())
+        self.point2spinBox.setValue(self.point1spinBox.value())
+        self.point3spinBox.setMinimum(self.point2spinBox.value())
+        self.point3spinBox.setValue(self.point2spinBox.value())
         
    
   

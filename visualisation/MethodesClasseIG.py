@@ -10,7 +10,7 @@ from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
 #Fichier contenant les méthodes de la classe InterfaceGraphique 
-
+OFFSET = 1000
 
 #Rend les boutons des points 1,2 et 3 cliquables
 def ajouter_points(self):
@@ -18,14 +18,21 @@ def ajouter_points(self):
     if self.nb_points == 1:
         self.point1Slider.setEnabled(True)
         self.point1spinBox.setEnabled(True)
+        self.point1spinBox.setMinimum(self.point0spinBox.value())
+        self.point1spinBox.setValue(self.point0spinBox.value() + OFFSET)
+        self.point0spinBox.setMaximum(self.point1spinBox.value())
     elif self.nb_points == 2:
         self.point2Slider.setEnabled(True)
         self.point2spinBox.setEnabled(True)
+        self.point2spinBox.setMinimum(self.point1spinBox.value())
+        self.point2spinBox.setValue(self.point1spinBox.value() + OFFSET)
+        self.point1spinBox.setMaximum(self.point2spinBox.value())
     else:
         self.point3Slider.setEnabled(True)
         self.point3spinBox.setEnabled(True)
-    self.point1spinBox.setMinimum(self.point0spinBox.value())
-    self.point1spinBox.setValue(self.point0spinBox.value())  
+        self.point3spinBox.setMinimum(self.point2spinBox.value())
+        self.point3spinBox.setValue(self.point2spinBox.value() + OFFSET)
+        self.point2spinBox.setMaximum(self.point3spinBox.value())
     return self.nb_points
 
 
