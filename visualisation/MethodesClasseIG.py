@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 import visualisation_ok as visu
 #import WindowStandby
 import LirePoints
+import WindowStandby as WS
+import time
 from matplotlib.backends.backend_qt5agg import FigureCanvas 
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -11,6 +13,7 @@ from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 #Fichier contenant les méthodes de la classe InterfaceGraphique 
 OFFSET = 1000
+
 
 #Rend les boutons des points 1,2 et 3 cliquables
 def ajouter_points(self):
@@ -65,6 +68,9 @@ def choix_fichier(self):
     #Gestion de l'exception dans le cas où l'utilisateur choisit un mauvais dossier
     #Si aucun dossier n'est sélectionné path = 0 et il ne se passe rien
     if path:
+        Loader = QtGui.QMovie("loader.gif")
+        WS.PauseWindow(self, Loader)
+        time.sleep(0.2)
         try:
             self.matrix, w, d, h = visu.MatrixGeneration(path+'/*.tif')
         except IndexError:
@@ -74,6 +80,7 @@ def choix_fichier(self):
             gestion_message(self, 113)
             return 1
         gestion_message(self, 115, str(w),str(d),str(h))
+        WS.RestartWindow(self, Loader)
         return self.matrix
 
 
