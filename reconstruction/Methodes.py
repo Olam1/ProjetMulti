@@ -1,15 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb 19 12:37:16 2020
-
-@author: malot
-"""
-
-import os
-import tomopy
-import pylab
-import glob
-import numpy as np
 from PyQt5 import QtWidgets
 from PIL import Image
 
@@ -20,23 +8,35 @@ def MatrixGeneration(filePath):
     filenames.sort()
 
     temp = pylab.imread(filenames[0])
-    d, w = temp.shape
+    w,d = temp.shape
     h = len(filenames)
-    matrix = np.zeros((d, w, h), dtype=np.uint16)
+    matrix = np.zeros((w,d,h), dtype=np.uint16)
     k=0
     for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
         matrix[:,:,k] = im
         k+=1
+        
+    matrix=np.rot90(matrix, axes=(0,1))     
     result = [matrix, w, d, h]
     matrix = tomopy.minus_log(matrix)
     rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')
+    print("test")
+    print(len(rec))
     
-    """for i in range(len(rec)):
-        img = Image.fromarray(rec[i], mode='F')
-        img = img.convert("L")
-        img.save(str(i) + ".png", "PNG")"""
+    compteur=0
+    
+    for i in range(len(rec)):
+        #img = Image.fromarray(rec[i], mode='F')
+        #img = img.convert("L")
+        #img.save(str(i) + ".png", "PNG")
+        compteur=compteur+1
+    print(compteur)    
+    pylab.imshow(rec[1], cmap='gray')
+    pylab.imshow(rec[250], cmap='gray')
     pylab.imshow(rec[500], cmap='gray')
+    pylab.imshow(rec[750], cmap='gray')
+    pylab.imshow(rec[1300], cmap='gray')
     pylab.show()
     return result
 
