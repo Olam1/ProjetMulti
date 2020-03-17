@@ -35,6 +35,8 @@ def MatrixGeneration(filePath):
         compteur=compteur+1
     print(compteur)    
     pylab.imshow(rec[1], cmap='gray')
+    pylab.show()
+    print("\n\nJe suis ici\n\n")
     pylab.imshow(rec[250], cmap='gray')
     pylab.show()
     return 0
