@@ -20,25 +20,27 @@ def MatrixGeneration(filePath):
     filenames.sort()
 
     temp = pylab.imread(filenames[0])
-    d, w = temp.shape
+    w, d = temp.shape
     h = len(filenames)
-    matrix = np.zeros((d, w, h), dtype=np.uint16)
+    matrix = np.zeros((h, w, d), dtype=np.uint16)
     k=0
     for img in filenames: #On suppose que tous les fichiers sont des tif    
         im=pylab.imread(img)
-        matrix[:,:,k] = im
+        matrix[k,:,:] = im
         k+=1
-    result = [matrix, w, d, h]
+    
     matrix = tomopy.minus_log(matrix)
     rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')
     
-    """for i in range(len(rec)):
-        img = Image.fromarray(rec[i], mode='F')
-        img = img.convert("L")
-        img.save(str(i) + ".png", "PNG")"""
+    print(rec.shape)
+    
+   #for i in range(len(rec)):
+     #   img = Image.fromarray(rec[i], mode='F')
+    #    img = img.convert("L")
+      #  img.save(str(i) + ".png", "PNG")
     pylab.imshow(rec[500], cmap='gray')
     pylab.show()
-    return result
+    return 0
 
 #Reçoit un dossier contenant les TIF et renvoie une matrice
 def choix_fichier(self):
