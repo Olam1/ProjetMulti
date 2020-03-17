@@ -1,5 +1,5 @@
 # ProjetMulti
- Le programme permet de visualiser des stacks de fichiers .tif en 3D et de les traiter
+ Le programme permet de visualiser un dossier de fichiers .tif en 3D et de les traiter
  rapidement
 
 ## Exécuter le programme
@@ -16,8 +16,6 @@
  - L'utilisateur peut ajouter des points pour filtrer plus précisément les valeurs de pixels 
   qu'il souhaite observer. Pour cela il lui suffit de cliquer sur 'Add Point' et de régler ensuite
   la valeur des pixels à sélectionner et l'opacité qu'il souhaite leur appliquer
- - Le bouton 'Update Graph' permet d'afficher un graphique représentant l'opacité en fonction de la 
-  valeur des pixels
  - Enfin, l'appuie sur 'Visualisation' ouvre une fenêtre contenant l'objet 3D, qu'il est possible de 
   tourner, zoomer ou déplacer.
 
