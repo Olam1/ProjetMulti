@@ -22,6 +22,6 @@
 ## Pré-requis
  - PyQt5
  - Pylab
- - Glob
- - Vtk
- - Tomopy
+ - [Glob](https://docs.python.org/fr/3.6/library/glob.html)
+ - [Vtk](https://github.com/Kitware/VTK)
+ - [Tomopy](https://github.com/tomopy/tomopy)
