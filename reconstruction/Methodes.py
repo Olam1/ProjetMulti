@@ -23,8 +23,9 @@ def MatrixGeneration(filePath):
         k+=1 
     print("Je suis là")
     #matrix=np.rot90(matrix, axes=(0,1))     
-    #result = [matrix, w, d, h]
+    print(matrix.shape)
     matrix = tomopy.minus_log(matrix)
+    print(matrix.shape)
     rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')    
     compteur=0
     print(rec.shape)

@@ -135,13 +135,7 @@ def afficher_graph(self):
     #On ajoute le widget contenant le graph dans le layout  
     self.graph_layout.addWidget(self.plotWidget)
     
-    ActualiserMinMax(self)
-    '''self.point1spinBox.setMinimum(p0["value"])
-    self.point2spinBox.setMinimum(p1["value"])
-    self.point3spinBox.setMinimum(p2["value"])
-    self.point3spinBox.setMaximum(p5["value"])
-    self.point2spinBox.setMaximum(p3["value"])   
-    self.point1spinBox.setMaximum(p2["value"])'''
+    #ActualiserMinMax(self)
     return 0
 
 
@@ -181,7 +175,6 @@ def capture(self):
     return 0
     
 def ActualiserMinMax(self):
-    print("wsh")
     p0, p5, p1, p2, p3 =LirePoints.Do(self)
     self.point1spinBox.setMinimum(p0["value"])
     self.point2spinBox.setMinimum(p1["value"])
