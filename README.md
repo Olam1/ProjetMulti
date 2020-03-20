@@ -24,3 +24,4 @@
  - Pylab
  - Glob
  - Vtk
+ - Tomopy
