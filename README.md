@@ -28,4 +28,3 @@
  - [Vtk](https://github.com/Kitware/VTK)
  - [Tomopy](https://github.com/tomopy/tomopy)
  
-![logo INSA](https://www.asso-cocktail.fr/misc/image/adherents/INSA%20Strasbourg.png)
