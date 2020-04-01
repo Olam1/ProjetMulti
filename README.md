@@ -1,7 +1,9 @@
-# ProjetMulti
+## <a href="http://www.insa-toulouse.fr/" ><img src="http://www.math.univ-toulouse.fr/~besse/Wikistat/Images/Logo_INSAvilletoulouse-RVB.png" style="float:left; max-width: 80px; display: inline" alt="INSA"/></a> |  [*Génie Physique*](http://geniephysique.insa-toulouse.fr/fr/index.html) <span style='color:blue'>|</span> [*ProjetMulti*](https://github.com/Olam1/ProjetMulti)
+
+# Mise en place d'un système de tomographie X
  Le programme permet de visualiser un dossier de fichiers .tif en 3D et de les traiter
  rapidement
-
+ 
 ## Exécuter le programme
  Il est nécessaire de télécharger l'ensemble des fichiers de la branche 'master'
  et d'éxécuter le fichier nommé 'main.py'
@@ -22,5 +24,7 @@
 ## Pré-requis
  - PyQt5
  - Pylab
- - Glob
- - Vtk
+ - [Glob](https://docs.python.org/fr/3.6/library/glob.html)
+ - [Vtk](https://github.com/Kitware/VTK)
+ - [Tomopy](https://github.com/tomopy/tomopy)
+ 
