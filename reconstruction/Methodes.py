@@ -26,7 +26,7 @@ def MatrixGeneration(filePath):
     print(matrix.shape)
     matrix = tomopy.minus_log(matrix)
     print(matrix.shape)
-    rec = tomopy.recon(matrix, tomopy.angles(103,0.,360.), algorithm='fbp')    
+    rec = tomopy.recon(matrix, tomopy.angles(103,0.471,357.829), algorithm='fbp')    
     compteur=0
     print(rec.shape)
     for i in range(len(rec)):
@@ -35,8 +35,8 @@ def MatrixGeneration(filePath):
         #img.save(str(i) + ".png", "PNG")
         compteur=compteur+1
     print(compteur)    
-    pylab.imshow(rec[1], cmap='gray')
-    pylab.imshow(rec[250], cmap='gray')
+    pylab.imshow(rec[65], cmap='gray')
+    #pylab.imshow(rec[250], cmap='gray')
     pylab.show()
     return 0
 
