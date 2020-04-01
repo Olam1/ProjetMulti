@@ -84,6 +84,14 @@ def MatrixGeneration(self, filePath, factor):
         im = np.flipud(im)
         imwrite(join(output_dir, 'reco%04d.png' % i), im)
     
+    #Message de validation
+    msg = QtWidgets.QMessageBox()
+    msg.setIcon(1)
+    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+    msg.setWindowTitle("Information")
+    msg.setText("La reconstruction a bien été effectué")
+    msg.exec()
+    
     # Cleanup.
     astra.algorithm.delete(algorithm_id)
     astra.data3d.delete(reconstruction_id)
