@@ -22,21 +22,23 @@ from PIL import Image
 
 import astra
 
-#Ouvre toutes les ficheirs d'un dossier et genère un volume constitué de l'empilement de toutes les slices 2D
-def MatrixGeneration(self, filePath, factor):   
+
+def MatrixGeneration(self, filePath, factor): 
+    # On crée des variables qui correspondent aux dimensions de la radio X
+    # Le paramètre "factor" permet de s'ajuster avec le redimensionnement 
+    # opéré sur le projections dans la fonction "downscaleIMG"
     distance_source_origin = 300  # [mm]
     distance_origin_detector = 100  # [mm]
     detector_pixel_size = 0.08117512  # [mm]
-    detector_rows = int(1000 * factor)  # Vertical size of detector [pixels].
-    detector_cols = int(1000 * factor)   # Horizontal size of detector [pixels].
+    detector_rows = int(1000 * factor)  # Hauteur du détecteur [pixels]
+    detector_cols = int(1000 * factor)   # Largeur du détecteur [pixels]
     num_of_projections = 360
     #angles = tomopy.angles(num_of_projections,0.471,357.829)
     angles = np.linspace(0, 2 * np.pi, num=num_of_projections, endpoint=False)
     output_dir = 'recon'
     
-    # Load projections.
-    projections = np.zeros((detector_rows, num_of_projections, detector_cols))     
-        
+    # On ouvre tous les ficheirs de projections et on les stocke dans la matrice "projections"
+    projections = np.zeros((detector_rows, num_of_projections, detector_cols))      
     for i in range(1, num_of_projections+1):
         im = imread(join(filePath, 'laser_hugo-malo_%04d.tif' % i)).astype(float)
         im /= 65535
@@ -44,26 +46,33 @@ def MatrixGeneration(self, filePath, factor):
         im = downscaleIMG(im, factor)
         #print(im.shape)
         projections[:, i-1, :] = im
-        self.progressBar.setValue(int((i/num_of_projections)*100))
+        self.progressBar.setValue(int((i/num_of_projections)*100)) # Bar de chargement des images
         #print('laser_hugo-malo_%04d.tif' % i)
     print('Hello')
     
-    # Copy projection images into ASTRA Toolbox.
+    # On donne ici la géométrie du détecteur
+    # Plusieurs géométries sont possibles (http://www.astra-toolbox.com/docs/geom3d.html)
+    # selon la réalité de la radio X
     proj_geom = astra.create_proj_geom('cone', 1, 1, detector_rows, detector_cols, angles,
                          (distance_source_origin + distance_origin_detector) /
                          detector_pixel_size, 0)
     print('0')
+    
+    #On crée les sinogrammes associés aux slices 
     projections_id = astra.data3d.create('-sino', proj_geom, projections)
     print('1')
     
-    # Create reconstruction.
+    # On crée le volume dans lequel sera compris notre objet
+    # Plusieurs géométries sont possibles (http://www.astra-toolbox.com/docs/data3d.html#)
     vol_geom = astra.creators.create_vol_geom(detector_cols, detector_cols,
                                               detector_rows)
-    print('2')
     reconstruction_id = astra.data3d.create('-vol', vol_geom, data=0)
+    print('2')
+    
+    # On définit l'algorithme de reconstruction (http://www.astra-toolbox.com/docs/algs)
+    # Les images sont stockées dans la variable "reconstruction"
+    alg_cfg = astra.astra_dict('FDK_CUDA') 
     print('3')
-    alg_cfg = astra.astra_dict('FDK_CUDA') #On définit l'algorithme http://www.astra-toolbox.com/docs/algs
-    print('4')
     #alg_cfg['ProjectorId'] = projector_id #Seulement pour les géométries 2D
     alg_cfg['ProjectionDataId'] = projections_id
     alg_cfg['ReconstructionDataId'] = reconstruction_id
@@ -71,12 +80,12 @@ def MatrixGeneration(self, filePath, factor):
     astra.algorithm.run(algorithm_id)
     reconstruction = astra.data3d.get(reconstruction_id)
      
-    # Limit and scale reconstruction.
+    # On normalise les valeurs obtenues
     reconstruction[reconstruction < 0] = 0
     reconstruction /= np.max(reconstruction)
     reconstruction = np.round(reconstruction * 255).astype(np.uint8)
      
-    # Save reconstruction.
+    # On enregistre les images dans le dossier "recon" créé dans le répertoire de travail
     if not isdir(output_dir):
         mkdir(output_dir)
     for i in range(detector_rows):
@@ -84,7 +93,7 @@ def MatrixGeneration(self, filePath, factor):
         im = np.flipud(im)
         imwrite(join(output_dir, 'reco%04d.png' % i), im)
     
-    #Message de validation
+    # Message de validation
     msg = QtWidgets.QMessageBox()
     msg.setIcon(1)
     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -110,6 +119,7 @@ def choix_fichier(self):
             options = QtWidgets.QFileDialog.ShowDirsOnly
             )
     #Gestion de l'exception dans le cas où l'utilisateur choisit un mauvais dossier
+    #Dans ce cas on envoie des projections générées virtuellement par tomopy
     #Si aucun dossier n'est sélectionné path = 0 et il ne se passe rien
     if path:
         try:
@@ -117,7 +127,8 @@ def choix_fichier(self):
         except IndexError:
             return tomopy.project(tomopy.shepp3d(), tomopy.angles(180))
     
-
+# Cette fonction permet de redimensionner les images pour réduire les temps de calcul
+# Le résultat final sera aussi moins bon
 def downscaleIMG (im, factor):
     im = Image.fromarray(im)
     width, height = im.size

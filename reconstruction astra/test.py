@@ -19,7 +19,7 @@ class InterfaceGraphique(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         #Utilisation de la méthode setupUi hérité de la classe Ui_Mainwindow
         self.setupUi(self)
-        
+        #Appel à la fonction "choix_fichier"
         self.selectFile.clicked.connect(self.choix_fichier)
         
         
@@ -29,8 +29,3 @@ if __name__ == "__main__":
     window.show()
     sys.exit(app.exec_())
 
-
-
-
-#if __name__ == '__main__':
-#    main()

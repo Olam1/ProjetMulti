@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="selectFile">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>220</y>
+      <x>20</x>
+      <y>180</y>
       <width>75</width>
       <height>51</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QComboBox" name="selectFactor">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>230</y>
+      <x>260</x>
+      <y>140</y>
       <width>69</width>
       <height>22</height>
      </rect>
@@ -60,8 +60,8 @@
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>310</y>
+      <x>20</x>
+      <y>260</y>
       <width>118</width>
       <height>23</height>
      </rect>
@@ -71,6 +71,19 @@
     </property>
     <property name="textVisible">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>140</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Facteur de redimensionnement des projections</string>
     </property>
    </widget>
   </widget>

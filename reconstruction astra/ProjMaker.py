@@ -12,19 +12,22 @@ from os import mkdir
 from os.path import join, isdir
 from imageio import get_writer
  
+# Il est nécéssaire d'avoir une carte graphique NVidia supportant CUDA 
+# pour faire tourner ce programme.
 import astra
  
-# Configuration.
+# On crée des variables qui correspondent aux dimensions souhaitées
 distance_source_origin = 300  # [mm]
 distance_origin_detector = 100  # [mm]
 detector_pixel_size = 0.08117512  # [mm]
-detector_rows = 1000  # Vertical size of detector [pixels].
-detector_cols = 1000  # Horizontal size of detector [pixels].
+detector_rows = 1000  # Hauteur du détecteur [pixels]
+detector_cols = 1000  # Largeur du détecteur [pixels]
 num_of_projections = 360
 angles = np.linspace(0, 2 * np.pi, num=num_of_projections, endpoint=False)
 output_dir = 'dataset'
  
-# Create phantom.
+# On crée un objet virtuel appelé "phantom"
+# Cet objet est un pavé avec un trou carré sur l'une des faces latéral
 vol_geom = astra.creators.create_vol_geom(detector_cols, detector_cols,
                                           detector_rows)
 phantom = np.zeros((detector_rows, detector_cols, detector_cols))
@@ -43,21 +46,21 @@ phantom[detector_rows // 2 - 5 :       detector_rows // 2 + 5,
         detector_cols // 2 - 5 :       detector_cols // 2 + 5] = 0
 phantom_id = astra.data3d.create('-vol', vol_geom, data=phantom)
  
-# Create projections. With increasing angles, the projection are such that the
-# object is rotated clockwise. Slice zero is at the top of the object. The
-# projection from angle zero looks upwards from the bottom of the slice.
+# On crée des projections avec des angles croissants 
+# Les projections sont telles que l'objet est tourné dans le sens des aiguilles d'une montre 
+# La tranche zéro se trouve en haut de l'objet. 
 proj_geom = astra.create_proj_geom('cone', 1, 1, detector_rows, detector_cols, angles,
                          (distance_source_origin + distance_origin_detector) / detector_pixel_size, 0)
 
 projections_id, projections = astra.creators.create_sino3d_gpu(phantom_id, proj_geom, vol_geom)
 projections /= np.max(projections)
  
-# Apply Poisson noise.
+# On applique un bruit de Poisson
 projections = np.random.poisson(projections * 10000) / 10000
 projections[projections > 1.1] = 1.1
 projections /= 1.1
  
-# Save projections.
+# On enregistre les projections dans un dossier "dataset" créé dans le répertoire de travail
 if not isdir(output_dir):
     mkdir(output_dir)
 projections = np.round(projections * 65535).astype(np.uint16)
@@ -66,7 +69,7 @@ for i in range(num_of_projections):
     with get_writer(join(output_dir, 'proj%04d.tif' %i)) as writer:
         writer.append_data(projection, {'compress': 9})
  
-# Cleanup.
+# Nettoyage
 astra.data3d.delete(projections_id)
 astra.data3d.delete(phantom_id)
 
