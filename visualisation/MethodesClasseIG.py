@@ -2,7 +2,6 @@
 import os
 from PyQt5 import QtWidgets, QtGui
 import visualisation_ok as visu
-#import WindowStandby
 import LirePoints
 import WindowStandby as WS
 import time
@@ -36,6 +35,7 @@ def ajouter_points(self):
         self.point3spinBox.setMinimum(self.point2spinBox.value())
         self.point3spinBox.setValue(self.point2spinBox.value() + OFFSET)
         self.point2spinBox.setMaximum(self.point3spinBox.value())
+        self.point3spinBox.setMaximum(self.point5spinBox.value())
     return self.nb_points
 
 
@@ -44,13 +44,16 @@ def retirer_points(self):
     if self.nb_points == 1:
         self.point1Slider.setEnabled(False)
         self.point1spinBox.setEnabled(False)
+        self.point0spinBox.setMaximum(self.point5spinBox.value())
     elif self.nb_points == 2:
         self.point2Slider.setEnabled(False)
         self.point2spinBox.setEnabled(False)
+        self.point1spinBox.setMaximum(self.point5spinBox.value())
     else:
         self.nb_points = 3
         self.point3Slider.setEnabled(False)
         self.point3spinBox.setEnabled(False)
+        self.point2spinBox.setMaximum(self.point5spinBox.value())
     self.nb_points-=1
     return self.nb_points
  
