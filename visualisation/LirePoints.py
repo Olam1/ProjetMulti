@@ -4,7 +4,6 @@
 #Retourne une liste de points avec leur valeur et opacité
 
 def Do(MonInterface):
-        print("bite")
         p1={"value":0, "opacity":0.}
         p2={"value":0, "opacity":0.}
         p3={"value":0, "opacity":0.}

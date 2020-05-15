@@ -121,26 +121,4 @@ def creer_graph(point_0 = {"value":0, "opacity":0.},
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#visualisation()
+
