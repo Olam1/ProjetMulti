@@ -7,8 +7,10 @@ Created on Fri Feb  7 13:53:58 2020
 
 import sys
 from PyQt5 import uic, QtWidgets
+import os
 
-
+cwd = os.getcwd()
+print(cwd)
 Ui_MainWindow, QtBaseClass = uic.loadUiType("user_interface_test.ui")
 
 
