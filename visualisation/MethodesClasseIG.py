@@ -173,7 +173,7 @@ def capture(self):
     file = QtWidgets.QFileDialog.getSaveFileName(self,
                                                  'Save Image As', os.sep.join((os.path.expanduser('~'), 'Desktop')), #Permet d'afficher le bureau à l'ouverture de la fenêtre
                                                  "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)")
-    self.object_plot.grab().save(file[0]);
+    self.centralwidget.grab().save(file[0]);
     gestion_message(self, 114)
     return 0
     
