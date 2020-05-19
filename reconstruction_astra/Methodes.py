@@ -40,14 +40,13 @@ def MatrixGeneration(self, filePath, factor):
     # On ouvre tous les ficheirs de projections et on les stocke dans la matrice "projections"
     projections = np.zeros((detector_rows, num_of_projections, detector_cols))      
     for i in range(1, num_of_projections+1):
-        im = imread(join(filePath, 'laser_hugo-malo_%04d.tif' % i)).astype(float)
+        im = imread(join(filePath, 'proj%04d.tif' % i)).astype(float)
         im /= 65535
         #print(im.shape)
         im = downscaleIMG(im, factor)
         #print(im.shape)
         projections[:, i-1, :] = im
         self.progressBar.setValue(int((i/num_of_projections)*100)) # Bar de chargement des images
-        #print('laser_hugo-malo_%04d.tif' % i)
     print('Hello')
     
     # On donne ici la géométrie du détecteur
@@ -79,7 +78,7 @@ def MatrixGeneration(self, filePath, factor):
     algorithm_id = astra.algorithm.create(alg_cfg)
     astra.algorithm.run(algorithm_id)
     reconstruction = astra.data3d.get(reconstruction_id)
-     
+    print('4')
     # On normalise les valeurs obtenues
     reconstruction[reconstruction < 0] = 0
     reconstruction /= np.max(reconstruction)
@@ -92,7 +91,7 @@ def MatrixGeneration(self, filePath, factor):
         im = reconstruction[i, :, :]
         im = np.flipud(im)
         imwrite(join(output_dir, 'reco%04d.png' % i), im)
-    
+    print('5')
     # Message de validation
     msg = QtWidgets.QMessageBox()
     msg.setIcon(1)
