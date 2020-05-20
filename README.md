@@ -2,11 +2,11 @@
 
 # Mise en place d'un système de tomographie X
  Le programme permet de visualiser un dossier de fichiers .tif en 3D et de les traiter
- rapidement
+ rapidement. Les programmes de reconstructions ne permettent pas encore d'obtenir un résultat probant.
  
 ## Exécuter le programme
- Il est nécessaire de télécharger l'ensemble des fichiers de la branche 'master'
- et d'éxécuter le fichier nommé 'main.py'
+ Il est nécessaire de télécharger l'ensemble des fichiers de la branche *master*
+ et d'éxécuter le fichier nommé *main.py* pour la visualisation ou *test.py* pour la reconstruction.
  
 ## Utilisation du logiciel de visualisation
  - L'utilisateur commence par sélectionner ses fichiers à l'aide du bouton 'Select Folder'
@@ -41,4 +41,5 @@
  - [Glob](https://docs.python.org/fr/3.6/library/glob.html)
  - [Vtk](https://github.com/Kitware/VTK)
  - [Tomopy](https://github.com/tomopy/tomopy)
+ - astra-toolbox
  
