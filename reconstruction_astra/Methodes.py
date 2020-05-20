@@ -39,13 +39,13 @@ def MatrixGeneration(self, filePath, factor):
     
     # On ouvre tous les ficheirs de projections et on les stocke dans la matrice "projections"
     projections = np.zeros((detector_rows, num_of_projections, detector_cols))      
-    for i in range(1, num_of_projections+1):
+    for i in range(num_of_projections):
         im = imread(join(filePath, 'proj%04d.tif' % i)).astype(float)
         im /= 65535
         #print(im.shape)
         im = downscaleIMG(im, factor)
         #print(im.shape)
-        projections[:, i-1, :] = im
+        projections[:, i, :] = im
         self.progressBar.setValue(int((i/num_of_projections)*100)) # Bar de chargement des images
     print('Hello')
     
